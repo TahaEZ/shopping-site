@@ -1,0 +1,6 @@
+export { Home } from './Home/Home.page'
+export { Products } from './Products/Products.page'
+export { Basket } from './Basket/Basket.page'
+export { Product } from './Product/Product.page'
+export { PaymentResult } from './PaymentResult'
+export { Checkout } from './Checkout/Checkout.page'

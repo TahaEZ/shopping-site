@@ -15,7 +15,6 @@ import {
 	Product,
 	Products,
 } from '../Shopping/pages'
-
 class AppRoute extends Component {
 	state = {
 		basketList: [],
@@ -51,9 +50,6 @@ class AppRoute extends Component {
 							)
 						}}
 					/>
-					<Main>
-						<Product />
-					</Main>
 					<Route path='/basket' exact>
 						<Main>
 							<Basket basket-list={this.state.basketList} />

@@ -1,13 +1,11 @@
-import { Component } from 'react'
-class Panel extends Component {
-	render() {
-		return (
-			<>
-				<header></header>
-				{this.props.children}
-			</>
-		)
-	}
+import { Container } from 'reactstrap'
+const Panel = (props) => {
+	return (
+		<Container fluid>
+			<header></header>
+			{props.children}
+		</Container>
+	)
 }
 
 export { Panel }

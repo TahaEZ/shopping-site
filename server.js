@@ -5,7 +5,7 @@ const middlewares = jsonServer.defaults()
 const fs = require('fs')
 const path = require('path')
 const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const upload = multer({ dest: 'public/images/' })
 
 // Set default middlewares (logger, static, cors and no-cache)
 server.use(middlewares)
@@ -19,7 +19,7 @@ server.post('/upload', upload.single('image'), function (req, res, next) {
 
 // list all files API (for test)
 server.get('/files', (req, res, next) => {
-	fs.readdir('./uploads/', (err, files) => {
+	fs.readdir('./public/images/', (err, files) => {
 		if (err) return next(err)
 		res.json(files)
 	})
@@ -29,7 +29,7 @@ server.get('/files', (req, res, next) => {
 server.get('/files/:file_id', (req, res, next) => {
 	const { file_id } = req.params
 	res.set('Content-Type', 'image/jpeg')
-	res.sendFile(path.join(__dirname, 'uploads/' + file_id))
+	res.sendFile(path.join(__dirname, 'public/images/' + file_id))
 })
 
 // To handle POST, PUT and PATCH you need to use a body-parser

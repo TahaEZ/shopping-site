@@ -26,9 +26,11 @@ class AppRoute extends Component {
 			<BrowserRouter>
 				<Switch>
 					<Route path='/' exact>
-						<Main>
+						<Main
+							adminPanelLink='panel/login'
+							basketList={this.state.basketList}
+						>
 							<Home />
-							222
 						</Main>
 					</Route>
 					<Route
@@ -36,7 +38,7 @@ class AppRoute extends Component {
 						exact
 						render={(props) => {
 							return (
-								<Main>
+								<Main basketList={this.state.basketList}>
 									<Products {...props} />
 								</Main>
 							)
@@ -47,29 +49,29 @@ class AppRoute extends Component {
 						exact
 						render={(props) => {
 							return (
-								<Main>
+								<Main basketList={this.state.basketList}>
 									<Product {...props} />
 								</Main>
 							)
 						}}
 					/>
 					<Route path='/basket' exact>
-						<Main>
+						<Main basketList={this.state.basketList}>
 							<Basket basket-list={this.state.basketList} />
 						</Main>
 					</Route>
 					<Route path='/checkout' exact>
-						<Main>
+						<Main basketList={this.state.basketList}>
 							<Checkout />
 						</Main>
 					</Route>
 					<Route path='/payment-result/success' exact>
-						<Main>
+						<Main basketList={this.state.basketList}>
 							<PaymentResult status='success' />
 						</Main>
 					</Route>
 					<Route path='/payment-result/fail' exact>
-						<Main>
+						<Main basketList={this.state.basketList}>
 							<PaymentResult status='fail' />
 						</Main>
 					</Route>

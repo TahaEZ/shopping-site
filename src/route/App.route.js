@@ -15,6 +15,8 @@ import {
 	Product,
 	Products,
 } from '../Shopping/pages'
+import { fetchProducts } from '../api/products.api.get'
+fetchProducts(console.log, console.log)
 class AppRoute extends Component {
 	state = {
 		basketList: [],
@@ -26,6 +28,7 @@ class AppRoute extends Component {
 					<Route path='/' exact>
 						<Main>
 							<Home />
+							222
 						</Main>
 					</Route>
 					<Route

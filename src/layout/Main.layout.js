@@ -5,10 +5,14 @@ const Main = (props) => {
 		textDecoration: 'none',
 		fontWeight: 600,
 	}
-	const adminPanelLink = props.adminPanelLink
 	return (
 		<Container fluid>
-			<Navbar color='light' light>
+			<Navbar
+				color='light'
+				style={{ boxShadow: '5px 5px 10px rgb(200, 200, 200)' }}
+				light
+				className='mb-3'
+			>
 				<Nav
 					navbar='true'
 					className='d-flex flex-row justify-content-between align-items-center'
@@ -22,6 +26,7 @@ const Main = (props) => {
 							<img
 								src={process.env.PUBLIC_URL + '/images/sitePic.jpg'}
 								style={{ height: '90px' }}
+								alt='logo'
 							/>
 						</Link>
 						<Link to='/' style={{ textDecoration: 'none' }}>

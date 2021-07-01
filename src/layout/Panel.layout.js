@@ -35,13 +35,19 @@ const Panel = (props) => {
 						className='d-flex flex-row justify-content-center'
 					>
 						<Link to='/panel/product'>
-							<Button style={productBtn}>کالاها</Button>
+							<Button onClick={() => {}} style={productBtn}>
+								کالاها
+							</Button>
 						</Link>
 						<Link to='/panel/quantity'>
-							<Button style={quantityBtn}>موجودی و قیمت</Button>
+							<Button onClick={() => {}} style={quantityBtn}>
+								موجودی و قیمت
+							</Button>
 						</Link>
 						<Link to='/panel/orders'>
-							<Button style={ordersBtn}>سفارش ها</Button>
+							<Button onClick={() => {}} style={ordersBtn}>
+								سفارش ها
+							</Button>
 						</Link>
 					</NavItem>
 					<NavItem>

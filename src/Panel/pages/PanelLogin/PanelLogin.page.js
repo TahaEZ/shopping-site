@@ -21,7 +21,11 @@ const PanelLogin = () => {
 			<h1 style={{ fontSize: '1.5rem' }}>ورود به پنل مدیریت فروشگاه فلان</h1>
 			<InputField label='نام کاربری' className='my-2' type='text' />
 			<InputField label='رمز عبور' className='my-2' type='password' />
-			<Button onClick={clickHandler} style={{ width: '60px' }} className='mt-3'>
+			<Button
+				onClick={clickHandler}
+				style={{ width: '60px', backgroundColor: 'white', color: 'black' }}
+				className='mt-3'
+			>
 				ورود
 			</Button>
 			<ReturnToSite className='mt-3' />

@@ -16,8 +16,24 @@ const LinkLikeButton = (props) => {
 	const clickHandler = props.editable ? goToEditMode : props.callBack
 	return (
 		<>
-			{!editing && <Link onClick={clickHandler}>{props.value}</Link>}
-			{editing && <Input type='text' onKeyDown={handleKeyDown} />}
+			{!editing && (
+				<Link onClick={clickHandler} className='mx-2'>
+					{props.value}
+				</Link>
+			)}
+			{editing && (
+				<Input
+					style={{
+						maxHeight: '26px',
+						maxWidth: '100px',
+						position: 'relative',
+						left: '-50px',
+						boxSizing: 'border-box',
+					}}
+					type='text'
+					onKeyDown={handleKeyDown}
+				/>
+			)}
 		</>
 	)
 }

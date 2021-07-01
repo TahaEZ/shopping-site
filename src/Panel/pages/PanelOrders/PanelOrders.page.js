@@ -27,7 +27,9 @@ const PanelOrders = (props) => {
 	)
 	const [ordersList, setOrdersList] = useState([])
 	const [page, setPage] = useState(props.match ? +props.match.params.page : 1)
-	const [lastPage, setLastPage] = useState(1)
+	const [lastPage, setLastPage] = useState(
+		props.match ? +props.match.params.page : 1
+	)
 	const [pages, setPages] = useState([])
 	const onChangeValue = (e) => {
 		setOrdersFilter(e.target.value)

@@ -8,7 +8,6 @@ const MyButton = (props) => {
 	return (
 		<Button
 			onClick={handleClick}
-			color='primary'
 			style={props.style}
 			className={props.className}
 		>

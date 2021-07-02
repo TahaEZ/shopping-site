@@ -6,7 +6,7 @@ const Main = (props) => {
 		fontWeight: 600,
 	}
 	return (
-		<Container fluid>
+		<Container fluid className='m-0 p-0'>
 			<Navbar
 				color='light'
 				style={{ boxShadow: '5px 5px 10px rgb(200, 200, 200)' }}

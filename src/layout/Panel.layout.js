@@ -13,7 +13,7 @@ const Panel = (props) => {
 	let quantityBtn = props.active === 'quantity' ? activeStyle : defaultStyle
 	let ordersBtn = props.active === 'orders' ? activeStyle : defaultStyle
 	return (
-		<Container fluid>
+		<Container fluid className='p-0 m-0'>
 			<Navbar
 				color='light'
 				light

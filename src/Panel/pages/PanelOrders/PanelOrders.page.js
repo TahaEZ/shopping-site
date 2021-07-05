@@ -32,6 +32,7 @@ const PanelOrders = (props) => {
 	)
 	const [pages, setPages] = useState([])
 	const onChangeValue = (e) => {
+		console.log('radio', e.target.value)
 		setOrdersFilter(e.target.value)
 	}
 
@@ -53,9 +54,9 @@ const PanelOrders = (props) => {
 				const headerLinks = parseLinkHeader(res.headers.link)
 				let index = headerLinks.last.indexOf('_page=')
 				console.log('last page index', index + 6, headerLinks.last[index + 6])
-				index += 6
+				index += '_page='.length
 				const tempLastPage = headerLinks.last[index]
-				console.log(tempLastPage)
+				console.log('lastPage updated:', tempLastPage, headerLinks.last, index)
 				setLastPage(tempLastPage)
 				console.log('orders: ', res.data)
 			} else {
@@ -69,8 +70,35 @@ const PanelOrders = (props) => {
 			await fetchOrders(resolve, reject, ordersFilter, page, limit)
 		}
 		fetchData(ordersFilter, page, limit)
-	}, [ordersFilter])
+	}, [ordersFilter, page])
 	const openModal = () => {}
+
+	const linkClickHandler = (e) => {
+		let linkParent = e.target.parentNode
+
+		let isActive
+		const isDisabled =
+			linkParent.getAttribute('class') &&
+			linkParent.getAttribute('class').includes('disabled')
+		if (isDisabled) e.preventDefault()
+		else {
+			linkParent = linkParent.parentNode
+			isActive = linkParent.getAttribute('class').includes('active')
+			if (isActive) e.preventDefault()
+		}
+		if (!isActive && !isDisabled) {
+			linkParent = e.target.parentNode
+			console.log(linkParent)
+			const linkHref = linkParent.getAttribute('href')
+			console.log(
+				'clicked Link',
+				linkHref[linkHref.indexOf(`${ordersFilter}`) + ordersFilter.length + 1]
+			)
+			setPage(
+				+linkHref[linkHref.indexOf(`${ordersFilter}`) + ordersFilter.length + 1]
+			)
+		}
+	}
 	const clacSumOfBasketList = (basketList) => {
 		let sum = 0
 		for (let i = 0; i < basketList.length; i++) {
@@ -98,25 +126,29 @@ const PanelOrders = (props) => {
 					<Label for='delivered' className='mx-3'>
 						سفارش های تحویل شده
 					</Label>
-					<Input
-						name='orders-filter'
-						type='radio'
-						value='delivered'
-						id='delivered'
-						checked={ordersFilter === 'delivered'}
-						onChange={onChangeValue}
-					></Input>
+					<Link to='/panel/orders/delivered/1'>
+						<Input
+							name='orders-filter'
+							type='radio'
+							value='delivered'
+							id='delivered'
+							checked={ordersFilter === 'delivered'}
+							onChange={onChangeValue}
+						/>
+					</Link>
 					<Label for='expected' className='mx-3'>
 						سفارش های در انتظار ارسال
 					</Label>
-					<Input
-						name='orders-filter'
-						type='radio'
-						value='expected'
-						id='expected'
-						checked={ordersFilter === 'expected'}
-						onChange={onChangeValue}
-					></Input>
+					<Link to='/panel/orders/expected/1'>
+						<Input
+							name='orders-filter'
+							type='radio'
+							value='expected'
+							id='expected'
+							checked={ordersFilter === 'expected'}
+							onChange={onChangeValue}
+						/>
+					</Link>
 				</div>
 			</div>
 			<Table className='text-center'>
@@ -148,16 +180,9 @@ const PanelOrders = (props) => {
 					<Link
 						to={`/panel/orders/${ordersFilter}/${page - 1}`}
 						style={linkStyle}
+						onClick={linkClickHandler}
 					>
-						<PaginationLink
-							href={
-								page == 1
-									? `/panel/orders/${ordersFilter}/1`
-									: `/panel/orders/${ordersFilter}/${page - 1}`
-							}
-						>
-							قبلی
-						</PaginationLink>
+						<PaginationLink>قبلی</PaginationLink>
 					</Link>
 				</PaginationItem>
 				{pages.map((item) => (
@@ -165,10 +190,9 @@ const PanelOrders = (props) => {
 						<Link
 							to={`/panel/orders/${ordersFilter}/${item}`}
 							style={linkStyle}
+							onClick={linkClickHandler}
 						>
-							<PaginationLink href={`/panel/orders/${ordersFilter}/${item}`}>
-								{item}
-							</PaginationLink>
+							<PaginationLink>{item}</PaginationLink>
 						</Link>
 					</PaginationItem>
 				))}
@@ -176,16 +200,9 @@ const PanelOrders = (props) => {
 					<Link
 						to={`/panel/orders/${ordersFilter}/${page + 1}`}
 						style={linkStyle}
+						onClick={linkClickHandler}
 					>
-						<PaginationLink
-							href={
-								page == lastPage
-									? `/panel/orders/${ordersFilter}/${page}`
-									: `/panel/orders/${ordersFilter}/${page + 1}`
-							}
-						>
-							بعدی
-						</PaginationLink>
+						<PaginationLink>بعدی</PaginationLink>
 					</Link>
 				</PaginationItem>
 			</Pagination>

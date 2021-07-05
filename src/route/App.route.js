@@ -79,19 +79,33 @@ class AppRoute extends Component {
 						<PanelLogin />
 					</Route>
 					<Route path='/panel/product' exact>
-						<Panel active='product'>
-							<PanelProduct />
-						</Panel>
+						<Redirect to='/panel/product/1' />
 					</Route>
+					<Route
+						path='/panel/product/:page'
+						render={(props) => {
+							return (
+								<Panel active='product'>
+									<PanelProduct {...props} />
+								</Panel>
+							)
+						}}
+					/>
 					<Route path='/panel/quantity' exact>
-						<Panel active='quantity'>
-							<PanelQuantity />
-						</Panel>
+						<Redirect to='/panel/quantity/1' />
 					</Route>
+					<Route
+						path='/panel/quantity/:page'
+						render={(props) => {
+							return (
+								<Panel active='quantity'>
+									<PanelQuantity {...props} />
+								</Panel>
+							)
+						}}
+					/>
 					<Route path='/panel/orders' exact>
-						<Panel active='orders'>
-							<PanelOrders />
-						</Panel>
+						<Redirect to='/panel/orders/expected/1' />
 					</Route>
 					<Route
 						path='/panel/orders/:ordersFilter/:page'

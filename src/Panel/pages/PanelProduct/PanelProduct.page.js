@@ -34,7 +34,7 @@ const PanelProduct = (props) => {
 			if (res.headers.link) {
 				const headerLinks = parseLinkHeader(res.headers.link)
 				let index = headerLinks.last.indexOf('_page=')
-				index += 6
+				index += '_page='.length
 				const tempLastPage = headerLinks.last[index]
 				setLastPage(tempLastPage)
 			} else {
@@ -47,8 +47,26 @@ const PanelProduct = (props) => {
 			await fetchProducts(resolve, reject, page, limit)
 		}
 		fetchData(page, limit)
-	}, [])
-
+	}, [page])
+	const linkClickHandler = (e) => {
+		let linkParent = e.target.parentNode
+		let isActive
+		const isDisabled =
+			linkParent.getAttribute('class') &&
+			linkParent.getAttribute('class').includes('disabled')
+		if (isDisabled) e.preventDefault()
+		else {
+			linkParent = linkParent.parentNode
+			isActive = linkParent.getAttribute('class').includes('active')
+			if (isActive) e.preventDefault()
+		}
+		if (!isActive && !isDisabled) {
+			linkParent = e.target.parentNode
+			console.log(linkParent)
+			const linkHref = linkParent.getAttribute('href')
+			setPage(+linkHref[linkHref.indexOf('product/') + 'product/'.length])
+		}
+	}
 	function parseLinkHeader(linkHeader) {
 		const linkHeadersArray = linkHeader
 			.split(', ')
@@ -98,19 +116,31 @@ const PanelProduct = (props) => {
 			</Table>
 			<Pagination className='d-flex flex-row justify-content-center'>
 				<PaginationItem disabled={page == 1}>
-					<Link to={`/panel/quantity/${page - 1}`} style={linkStyle}>
+					<Link
+						to={`/panel/product/${page - 1}`}
+						style={linkStyle}
+						onClick={linkClickHandler}
+					>
 						<PaginationLink>قبلی</PaginationLink>
 					</Link>
 				</PaginationItem>
 				{pages.map((item) => (
 					<PaginationItem active={page == item}>
-						<Link to={`/panel/quantity/${item}`} style={linkStyle}>
+						<Link
+							to={`/panel/product/${item}`}
+							style={linkStyle}
+							onClick={linkClickHandler}
+						>
 							<PaginationLink>{item}</PaginationLink>
 						</Link>
 					</PaginationItem>
 				))}
 				<PaginationItem disabled={page == lastPage}>
-					<Link to={`/panel/quantity/${page + 1}`} style={linkStyle}>
+					<Link
+						to={`/panel/product/${page + 1}`}
+						style={linkStyle}
+						onClick={linkClickHandler}
+					>
 						<PaginationLink>بعدی</PaginationLink>
 					</Link>
 				</PaginationItem>

@@ -20,9 +20,14 @@ const PanelLogin = () => {
 			isValid = false
 			console.log(inputs[0].value.length)
 			if (inputs[0].value.length < 6) setFormValidation('six-character error')
-			else setFormValidation(null)
+			else {
+				setFormValidation(null)
+				isValid = true
+			}
 		}
+		console.log(isValid)
 		if (isValid) history.push('/panel/orders')
+
 		return false
 	}
 	return (

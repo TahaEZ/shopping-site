@@ -15,8 +15,7 @@ import {
 	Product,
 	Products,
 } from '../Shopping/pages'
-import { fetchProducts } from '../api/products.api.get'
-fetchProducts(console.log, console.log)
+
 class AppRoute extends Component {
 	state = {
 		basketList: [],
@@ -35,6 +34,16 @@ class AppRoute extends Component {
 					</Route>
 					<Route
 						path='/products/:category'
+						exact
+						render={(props) => {
+							return (
+								<Redirect to={`/products/${props.match.params.category}/1`} />
+							)
+						}}
+					></Route>
+
+					<Route
+						path='/products/:category/:page'
 						exact
 						render={(props) => {
 							return (

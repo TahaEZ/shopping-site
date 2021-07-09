@@ -7,7 +7,7 @@ const ProductCard = (props) => {
 			style={{
 				display: 'block',
 				border: 'solid black 1px',
-				width: '28vw',
+				width: '25vw',
 				height: '25vh',
 				textAlign: 'center',
 				margin: '1%',

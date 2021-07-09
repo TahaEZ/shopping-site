@@ -5,7 +5,25 @@ import { useHistory } from 'react-router-dom'
 const PanelLogin = () => {
 	let history = useHistory()
 	const clickHandler = () => {
-		history.push('/panel/orders')
+		setFirstTime(false)
+		let isValid = true
+		const inputs = document.querySelectorAll('input')
+		console.log(inputs)
+		if (!inputs[0].value || !inputs[1].value) {
+			isValid = false
+			setFormValidation('incomplete')
+		} else {
+			isValid = false
+			console.log(inputs[0].value.length)
+			if (inputs[0].value.length < 6) setFormValidation('six-character error')
+			else {
+				setFormValidation(null)
+				isValid = true
+			}
+		}
+		console.log(isValid)
+		if (isValid) history.push('/panel/orders')
+
 		return false
 	}
 	return (

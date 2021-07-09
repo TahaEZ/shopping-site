@@ -10,6 +10,7 @@ const MyButton = (props) => {
 			onClick={handleClick}
 			style={props.style}
 			className={props.className}
+			color={props.color}
 		>
 			{props.children}{' '}
 		</Button>

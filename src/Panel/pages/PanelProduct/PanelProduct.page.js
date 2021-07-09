@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react'
 import { LinkLikeButton } from '../../../components/LinklikeButton.component'
 import { Link } from 'react-router-dom'
 import { postProduct } from '../../../api/product.api.post'
+import { deleteProduct } from '../../../api/product.api.delete'
 const PanelProduct = (props) => {
 	const limit = 5
 	const [productList, setProductList] = useState([])
@@ -130,6 +131,13 @@ const PanelProduct = (props) => {
 		})
 		return Object.fromEntries(linkHeadersMap)
 	}
+	const deletePrdct = (e) => {
+		const productId = e.target.parentNode.parentNode.getAttribute('id')
+		deleteProduct(console.log, console.log, productId)
+		let tempList = productList
+		tempList = tempList.filter((item) => item.id != productId)
+		setProductList(tempList)
+	}
 	const linkStyle = { textDecoration: 'none', color: 'inherit' }
 	return (
 		<Container>
@@ -236,7 +244,7 @@ const PanelProduct = (props) => {
 							<td>{item.field}</td>
 							<td>
 								<LinkLikeButton value='ویرایش' callBack={() => {}} />
-								<LinkLikeButton value='حذف' callBack={() => {}} />
+								<LinkLikeButton value='حذف' callBack={deletePrdct} />
 							</td>
 						</tr>
 					))}

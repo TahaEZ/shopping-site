@@ -10,6 +10,7 @@ import { fetchProducts } from '../../../api/products.api.get'
 import { useState, useEffect } from 'react'
 import { LinkLikeButton } from '../../../components/LinklikeButton.component'
 import { Link } from 'react-router-dom'
+import { patchProduct } from '../../../api/products.api.patch'
 const PanelQuantity = (props) => {
 	const limit = 5
 	const [quantityList, setQuantityList] = useState([])
@@ -17,6 +18,7 @@ const PanelQuantity = (props) => {
 	const [lastPage, setLastPage] = useState(
 		props.match ? +props.match.params.page : 1
 	)
+	const [editedList, setEditedList] = useState([])
 	const [pages, setPages] = useState([])
 	useEffect(() => {
 		const tempPages = []
@@ -25,7 +27,9 @@ const PanelQuantity = (props) => {
 		}
 		setPages(tempPages)
 	}, [lastPage])
-
+	useEffect(() => {
+		console.log(editedList)
+	}, [editedList])
 	useEffect(() => {
 		function reject(err) {
 			console.log(err)
@@ -49,7 +53,42 @@ const PanelQuantity = (props) => {
 		}
 		fetchData(page, limit)
 	}, [page])
-
+	const submit = () => {
+		for (let i = 0; i < quantityList.length; i++) {
+			for (let j = 0; j < editedList.length; j++) {
+				if (quantityList[i].id == editedList[j].id) {
+					quantityList[i][Object.keys(editedList[j])[1]] = Object.values(
+						editedList[j]
+					)[1]
+				}
+			}
+		}
+		for (let item of editedList) patchProduct(item, item.id)
+		setEditedList([])
+	}
+	const edit = (object) => {
+		if (
+			!editedList.some(
+				(element) =>
+					element.id === object.id &&
+					Object.keys(element)[1] === Object.keys(object)[1]
+			)
+		)
+			setEditedList((prev) => [...prev, object])
+		else {
+			for (let i = 0; i < editedList.length; i++) {
+				if (editedList[i].id === object.id) {
+					editedList[i][Object.keys(object)[1]] = Object.values(object)[1]
+				}
+			}
+		}
+	}
+	const exitEditMode = (object) => {
+		const tempList = editedList.filter(
+			(item) => JSON.stringify(item) !== JSON.stringify(object)
+		)
+		setEditedList(tempList)
+	}
 	const linkClickHandler = (e) => {
 		let linkParent = e.target.parentNode
 		let isActive
@@ -86,7 +125,7 @@ const PanelQuantity = (props) => {
 		<Container>
 			<div className='d-flex flex-row justify-content-between align-items-center'>
 				<h2>مدیریت موجودی و قیمت‌ها</h2>
-				<Button onClick={() => {}}>ذخیره</Button>
+				<Button onClick={submit}>ذخیره</Button>
 			</div>
 			<Table className='text-center'>
 				<thead>
@@ -98,22 +137,26 @@ const PanelQuantity = (props) => {
 				</thead>
 				<tbody>
 					{quantityList.map((item) => (
-						<tr>
+						<tr productid={item.id}>
 							<td>{item.name}</td>
-							<td>
+							<td productid={item.id}>
 								<LinkLikeButton
 									editable='true'
-									exitEditMode={() => {}}
+									exitEditMode={exitEditMode}
 									value={item.price}
+									type='price'
 									productId={item.id}
+									callBack={edit}
 								/>
 							</td>
-							<td>
+							<td productid={item.id}>
 								<LinkLikeButton
 									editable='true'
-									exitEditMode={() => {}}
+									exitEditMode={exitEditMode}
 									value={item.quantity}
+									type='quantity'
 									productId={item.id}
+									callBack={edit}
 								/>
 							</td>
 						</tr>

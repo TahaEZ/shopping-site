@@ -20,8 +20,12 @@ import { LinkLikeButton } from '../../../components/LinklikeButton.component'
 import { Link } from 'react-router-dom'
 import { postProduct } from '../../../api/product.api.post'
 import { deleteProduct } from '../../../api/product.api.delete'
+import { patchProduct } from '../../../api/products.api.patch'
 const PanelProduct = (props) => {
+	const [productId, setProductId] = useState()
 	const limit = 5
+	const [editing, setEditing] = useState(false)
+	const [modalImg, setModalImg] = useState('')
 	const [productList, setProductList] = useState([])
 	const [page, setPage] = useState(props.match ? +props.match.params.page : 1)
 	const [lastPage, setLastPage] = useState(
@@ -79,7 +83,13 @@ const PanelProduct = (props) => {
 	}, [page])
 	const toggle = () => setModal(!modal)
 
-	const addProduct = () => {
+	const previewImage = () => {
+		const file = document.querySelector('#file-input').files[0]
+		console.log('fileInput', file)
+		setModalImg(URL.createObjectURL(file))
+	}
+
+	const submitProduct = () => {
 		let bodyFormData = new FormData()
 		const image = document.querySelector('#file-input').files[0]
 		const name = document.querySelector('#product-name').value
@@ -96,7 +106,14 @@ const PanelProduct = (props) => {
 			bodyFormData.append('price', price)
 			bodyFormData.append('quantity', quantity)
 			bodyFormData.append('description', description)
-			postProduct(console.log, console.log, bodyFormData)
+			if (editing) {
+				patchProduct(bodyFormData, productId, {
+					headers: { 'Content-Type': 'multipart/form-data' },
+				})
+				console.log(productId)
+			} else {
+				postProduct(console.log, console.log, bodyFormData)
+			}
 		}
 		toggle()
 	}
@@ -132,18 +149,29 @@ const PanelProduct = (props) => {
 		return Object.fromEntries(linkHeadersMap)
 	}
 	const deletePrdct = (e) => {
-		const productId = e.target.parentNode.parentNode.getAttribute('id')
+		productId = e.target.parentNode.parentNode.getAttribute('id')
 		deleteProduct(console.log, console.log, productId)
 		let tempList = productList
 		tempList = tempList.filter((item) => item.id != productId)
 		setProductList(tempList)
+	}
+	const editPrdct = (event) => {
+		setProductId(+event.target.parentNode.parentNode.getAttribute('id'))
+		setEditing(true)
+		toggle()
 	}
 	const linkStyle = { textDecoration: 'none', color: 'inherit' }
 	return (
 		<Container>
 			<div className='d-flex flex-row justify-content-between align-items-center'>
 				<h2>مدیریت کالاها</h2>
-				<Button onClick={toggle} color='success'>
+				<Button
+					onClick={() => {
+						setEditing(false)
+						toggle()
+					}}
+					color='success'
+				>
 					افزودن کالا
 				</Button>
 				<Modal isOpen={modal} toggle={toggle}>
@@ -159,6 +187,12 @@ const PanelProduct = (props) => {
 									type='file'
 									id='file-input'
 									className='form-control'
+									onChange={previewImage}
+								/>
+								<img
+									id='file-input-img'
+									src={modalImg}
+									style={{ width: '200px' }}
 								/>
 							</FormGroup>
 							<FormGroup>
@@ -215,7 +249,7 @@ const PanelProduct = (props) => {
 						<Button color='danger' onClick={toggle}>
 							لغو
 						</Button>
-						<Button color='success' onClick={addProduct}>
+						<Button color='success' onClick={submitProduct}>
 							ثبت
 						</Button>
 					</ModalFooter>
@@ -243,7 +277,7 @@ const PanelProduct = (props) => {
 							<td>{item.name}</td>
 							<td>{item.field}</td>
 							<td>
-								<LinkLikeButton value='ویرایش' callBack={() => {}} />
+								<LinkLikeButton value='ویرایش' callBack={editPrdct} />
 								<LinkLikeButton value='حذف' callBack={deletePrdct} />
 							</td>
 						</tr>

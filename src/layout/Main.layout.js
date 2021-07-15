@@ -1,6 +1,8 @@
 import { Container, Navbar, NavbarBrand, NavItem, Nav } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 const Main = (props) => {
+	console.log(props)
 	const linkStyle = {
 		textDecoration: 'none',
 		fontWeight: 600,
@@ -44,7 +46,7 @@ const Main = (props) => {
 						</Link>
 						<Link to='/basket' style={linkStyle}>
 							سبد خرید
-							{!!props.basketList.length && (
+							{!!props.basket.length && (
 								<div
 									style={{
 										width: '20px',
@@ -59,7 +61,7 @@ const Main = (props) => {
 										borderRadius: '50%',
 									}}
 								>
-									{props.basketList.length}
+									{props.basket.length}
 								</div>
 							)}
 						</Link>
@@ -72,4 +74,14 @@ const Main = (props) => {
 	)
 }
 
-export { Main }
+const mapStateToProps = (state) => {
+	return {
+		basket: state.basket,
+	}
+}
+const mapDispatchToProps = (dispatch) => {
+	return {}
+}
+
+const reduxMain = connect(mapStateToProps, mapDispatchToProps)(Main)
+export { reduxMain as Main }

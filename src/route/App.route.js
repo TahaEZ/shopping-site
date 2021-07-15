@@ -25,10 +25,7 @@ class AppRoute extends Component {
 			<BrowserRouter>
 				<Switch>
 					<Route path='/' exact>
-						<Main
-							adminPanelLink='panel/login'
-							basketList={this.state.basketList}
-						>
+						<Main basketList={this.state.basketList}>
 							<Home />
 						</Main>
 					</Route>

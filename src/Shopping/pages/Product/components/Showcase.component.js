@@ -1,9 +1,20 @@
 import { Link } from 'react-router-dom'
 import { Input } from 'reactstrap'
 import { Button } from '../../../../components/Button.component'
+import { addToBasket } from '../../../../redux/basket/basketActions'
+import { connect } from 'react-redux'
 const Showcase = (props) => {
 	const { image, name, field, subfield, price, quantity } = props.product
 	console.log(props.product)
+	const addProductToBasket = () => {
+		const basketQuantity = +document.querySelector('input').value
+		props.addToBasket({
+			id: props.product.id,
+			name: props.product.name,
+			quantity: basketQuantity ? basketQuantity : 1,
+			price: props.product.price,
+		})
+	}
 	return (
 		<figure style={{ height: '40vh' }} className='d-flex justify-content-start'>
 			<img
@@ -52,11 +63,23 @@ const Showcase = (props) => {
 							marginLeft: '20px',
 						}}
 					/>
-					<Button color='success'>اضافه به سبد خرید</Button>
+					<Button color='success' onClick={addProductToBasket}>
+						اضافه به سبد خرید
+					</Button>
 				</div>
 			</figcaption>
 		</figure>
 	)
 }
 
-export { Showcase }
+const mapStateToProps = (state) => {
+	return {}
+}
+console.log(document.querySelector('h2'))
+const mapDispatchToProps = (dispatch) => {
+	return {
+		addToBasket: (product) => dispatch(addToBasket(product)),
+	}
+}
+const reduxShowcase = connect(mapStateToProps, mapDispatchToProps)(Showcase)
+export { reduxShowcase as Showcase }

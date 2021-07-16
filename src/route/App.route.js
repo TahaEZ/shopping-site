@@ -15,7 +15,7 @@ import {
 	Product,
 	Products,
 } from '../Shopping/pages'
-
+import { Payment } from '../Payment Page/Payment'
 class AppRoute extends Component {
 	state = {
 		basketList: [],
@@ -70,6 +70,9 @@ class AppRoute extends Component {
 						<Main basketList={this.state.basketList}>
 							<Checkout />
 						</Main>
+					</Route>
+					<Route path='/payment' exact>
+						<Payment />
 					</Route>
 					<Route path='/payment-result/success' exact>
 						<Main basketList={this.state.basketList}>

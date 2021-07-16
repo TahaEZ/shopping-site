@@ -1,7 +1,11 @@
 import { Container } from 'reactstrap'
 import { Button, InputField } from '../../../components'
-
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 const Checkout = (props) => {
+	const pay = () => {
+		localStorage.setItem('basket', JSON.stringify(props.basket))
+	}
 	return (
 		<Container>
 			<h2>نهایی کردن خرید</h2>
@@ -44,19 +48,31 @@ const Checkout = (props) => {
 					label='تاریخ تحویل:'
 				/>
 			</form>
-			<Button
-				color='success'
-				className='py-2 text-center'
-				style={{
-					fontSize: '1.5rem',
-					width: '30%',
-					margin: '20px 35%',
-				}}
-			>
-				پرداخت
-			</Button>
+			<Link to='/payment'>
+				<Button
+					onClick={pay}
+					color='success'
+					className='py-2 text-center'
+					style={{
+						fontSize: '1.5rem',
+						width: '30%',
+						margin: '20px 35%',
+					}}
+				>
+					پرداخت
+				</Button>
+			</Link>
 		</Container>
 	)
 }
+const mapStateToProps = (state) => {
+	return {
+		basket: state.basket,
+	}
+}
+const mapDispatchToProps = (dispatch) => {
+	return {}
+}
 
-export { Checkout }
+const reduxCheckout = connect(mapStateToProps, mapDispatchToProps)(Checkout)
+export { reduxCheckout as Checkout }

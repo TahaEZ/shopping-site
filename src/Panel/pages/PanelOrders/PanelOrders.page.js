@@ -6,11 +6,17 @@ import {
 	Pagination,
 	PaginationItem,
 	PaginationLink,
+	Modal,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
 } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { LinkLikeButton } from '../../../components/LinklikeButton.component'
 import { fetchOrders } from '../../../api/orders.api.get'
+import { Button } from '../../../components'
+import { patchOrder } from '../../../api/order.api.patch'
 const PanelOrders = (props) => {
 	const limit = 5
 	let options = {
@@ -22,6 +28,8 @@ const PanelOrders = (props) => {
 		day: 'numeric',
 		hour12: false,
 	}
+	const [order, setOrder] = useState({ basketList: [] })
+	const [modal, setModal] = useState(false)
 	const [ordersFilter, setOrdersFilter] = useState(
 		props.match ? props.match.params.ordersFilter : 'expected'
 	)
@@ -71,8 +79,29 @@ const PanelOrders = (props) => {
 		}
 		fetchData(ordersFilter, page, limit)
 	}, [ordersFilter, page])
-	const openModal = () => {}
+	const openModal = (e) => {
+		const index = +e.target.parentNode.parentNode.getAttribute('index')
+		console.log(ordersList[index])
+		setOrder(ordersList[index])
+		setModal(true)
+	}
 
+	const deliver = () => {
+		const deliveryTime = new Date()
+		const deliveredOrder = {
+			deliveryTime,
+			delivered: true,
+		}
+		let tempOrdersList = ordersList.filter((item) => item.id !== order.id)
+		setOrdersList(tempOrdersList)
+		console.log('new Orders List', tempOrdersList)
+		patchOrder(deliveredOrder, order.id)
+		toggle()
+	}
+
+	const toggle = () => {
+		setModal((prev) => !prev)
+	}
 	const linkClickHandler = (e) => {
 		let linkParent = e.target.parentNode
 
@@ -102,7 +131,7 @@ const PanelOrders = (props) => {
 	const clacSumOfBasketList = (basketList) => {
 		let sum = 0
 		for (let i = 0; i < basketList.length; i++) {
-			sum += basketList[i].price
+			sum += basketList[i].price * basketList[i].quantity
 		}
 		return sum
 	}
@@ -162,7 +191,7 @@ const PanelOrders = (props) => {
 				</thead>
 				<tbody>
 					{ordersList.map((item) => (
-						<tr>
+						<tr index={ordersList.indexOf(item)}>
 							<td>{item.name}</td>
 							<td>{clacSumOfBasketList(item.basketList)}</td>
 							<td>
@@ -175,6 +204,68 @@ const PanelOrders = (props) => {
 					))}
 				</tbody>
 			</Table>
+			<Modal isOpen={modal} toggle={toggle}>
+				<ModalHeader toggle={toggle}>نمایش سفارش</ModalHeader>
+				<ModalBody className='d-flex flex-column align-items-center'>
+					<h3>
+						<span>نام مشتری: </span> <span>{order.name}</span>
+					</h3>
+					<h3>
+						<span>آدرس: </span> <span>{order.address}</span>
+					</h3>
+					<h3>
+						<span>تلفن: </span> <span>{order.phoneNumber}</span>
+					</h3>
+					<h3>
+						<span>زمان تحویل: </span>
+						<span>
+							{new Date(order.deliveryRequest).toLocaleString('fa-IR', options)}
+						</span>
+					</h3>
+					<h3>
+						<span>زمان سفارش: </span>
+						<span>
+							{new Date(order.submitionTime).toLocaleString('fa-IR', options)}
+						</span>
+					</h3>
+
+					<Table className='text-center'>
+						<thead>
+							<tr>
+								<th>کالا</th>
+								<th>قیمت</th>
+								<th>تعداد</th>
+							</tr>
+						</thead>
+						<tbody>
+							{order.basketList.map((item) => (
+								<tr key={item.id}>
+									<td>
+										<Link to={`/product/${item.id}`}>{item.productName}</Link>
+									</td>
+									<td>{item.price}</td>
+									<td>{item.quantity}</td>
+								</tr>
+							))}
+						</tbody>
+					</Table>
+				</ModalBody>
+				<ModalFooter>
+					{ordersFilter == 'expected' && (
+						<Button color='success' onClick={deliver}>
+							تحویل شد
+						</Button>
+					)}
+					{ordersFilter == 'delivered' && (
+						<span>
+							<span>زمان تحویل: </span>
+							<span>
+								{new Date(order.deliveryTime).toLocaleString('fa-IR', options)}
+							</span>
+						</span>
+					)}
+				</ModalFooter>
+			</Modal>
 			<Pagination className='d-flex flex-row justify-content-center'>
 				<PaginationItem disabled={page == 1}>
 					<Link

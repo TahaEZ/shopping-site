@@ -10,7 +10,7 @@ const Showcase = (props) => {
 		const basketQuantity = +document.querySelector('input').value
 		props.addToBasket({
 			id: props.product.id,
-			name: props.product.name,
+			productName: props.product.name,
 			quantity: basketQuantity ? basketQuantity : 1,
 			price: props.product.price,
 		})

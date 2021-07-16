@@ -1,5 +1,5 @@
 import { ADD_TO_BASKET } from './basketTypes'
-import { REMOVE_FROM_BASKET } from './basketTypes'
+import { REMOVE_FROM_BASKET, CLEAR_BASKET } from './basketTypes'
 export const addToBasket = (product) => {
 	console.log(product)
 	return {
@@ -16,5 +16,11 @@ export const removeFromBasket = (index) => {
 		payload: {
 			index,
 		},
+	}
+}
+
+export const clearBasket = () => {
+	return {
+		type: CLEAR_BASKET,
 	}
 }

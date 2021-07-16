@@ -1,7 +1,8 @@
-import { ADD_TO_BASKET, REMOVE_FROM_BASKET } from './basketTypes'
-const initialState = {
-	basket: [],
-}
+import { ADD_TO_BASKET, REMOVE_FROM_BASKET, CLEAR_BASKET } from './basketTypes'
+let initialState = {}
+if (localStorage.getItem('basket')) {
+	initialState.basket = JSON.parse(localStorage.getItem('basket'))
+} else initialState.basket = []
 
 const basketReducer = (state = initialState, action) => {
 	console.log('prevState', state)
@@ -32,6 +33,12 @@ const basketReducer = (state = initialState, action) => {
 			}
 			console.log(newState)
 			return newState
+		case CLEAR_BASKET:
+			return {
+				...state,
+				basket: [],
+			}
+
 		default:
 			return state
 	}

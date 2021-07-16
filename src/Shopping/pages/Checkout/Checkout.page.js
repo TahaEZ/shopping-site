@@ -4,7 +4,21 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 const Checkout = (props) => {
 	const pay = () => {
+		let order = {}
+		order.basketList = props.basket
+		const name = document.querySelector('#name').value
+		const lastName = document.querySelector('#last-name').value
+		const phoneNumber = document.querySelector('#phone-number').value
+		const address = document.querySelector('#address').value
+		const deliveryTime = document.querySelector('#delivery-time').value
+		order.name = name + ' ' + lastName
+		order.phoneNumber = phoneNumber
+		order.address = address
+		order.delivered = false
+		order.submitionTime = new Date()
+		order.deliveryRequest = new Date(deliveryTime)
 		localStorage.setItem('basket', JSON.stringify(props.basket))
+		localStorage.setItem('order', JSON.stringify(order))
 	}
 	return (
 		<Container>

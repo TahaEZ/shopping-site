@@ -1,5 +1,8 @@
+import { useEffect } from 'react'
 import { Container } from 'reactstrap'
-
+import { connect } from 'react-redux'
+import { clearBasket } from '../../../redux/basket/basketActions'
+import { postOrder } from '../../../api/order.api.post'
 const PaymentResult = (props) => {
 	let imgUrl
 	let text
@@ -11,6 +14,19 @@ const PaymentResult = (props) => {
 		text =
 			'با تشکر از پرداخت شما، سفارش شما ثبت شده و جهت هماهنگی ارسال با شما تماس گرفته خواهد شد!'
 	}
+
+	useEffect(() => {
+		if (props.status == 'success') {
+			const order = JSON.parse(localStorage.getItem('order'))
+			console.log('order', order)
+			postOrder(order)
+			localStorage.clear()
+			props.clearBasket()
+		} else {
+			localStorage.removeItem('order')
+		}
+	}, [])
+
 	return (
 		<Container>
 			<h2>نتیجه پرداخت</h2>
@@ -26,5 +42,17 @@ const PaymentResult = (props) => {
 		</Container>
 	)
 }
+const mapStateToProps = (state) => {
+	return {}
+}
 
-export { PaymentResult }
+const mapDispatchToProps = (dispatch) => {
+	return {
+		clearBasket: () => dispatch(clearBasket()),
+	}
+}
+const reduxPaymentResult = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(PaymentResult)
+export { reduxPaymentResult as PaymentResult }
